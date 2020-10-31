@@ -1,0 +1,8 @@
+.idea
+.venv
+*.egg-info
+.coverage
+htmlcov
+__pycache__/
+poetry.lock
+coverage.xml

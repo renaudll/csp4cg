@@ -1,0 +1,39 @@
+name: tests
+on: [push]
+
+jobs:
+  test:
+    name: main
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.9]
+    env:
+      DISPLAY: ':99.0'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install
+      # https://github.com/pytest-dev/pytest-qt/issues/293
+      - name: Setup ${{ matrix.os }}
+        run: |
+          sudo apt install libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xfixes0
+      - name: Run pytest
+        run: poetry run pytest
+      - name: Run mypy
+        run: poetry run mypy
+      - name: Run black
+        run: poetry run black --check .
+      - name: Publish coverage
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

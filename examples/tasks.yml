@@ -1,0 +1,370 @@
+artists:
+- availability: 100
+  name: Artist1
+  tags:
+  - name: combat
+    weight: 10
+  - name: bodymech
+    weight: 15
+- availability: 75
+  name: Artist2
+  tags:
+  - name: acting
+    weight: 10
+- availability: 100
+  name: Artist3
+  tags:
+  - name: acting
+    weight: 10
+- availability: 100
+  name: Artist4
+  tags:
+  - name: character1
+    weight: 5
+  - name: acting
+    weight: 10
+- availability: 100
+  name: Artist5
+- availability: 100
+  name: Artist6
+- availability: 100
+  name: Artist7
+combinations:
+- tasks:
+  - '0100'
+  - '0110'
+  weight: 10
+- tasks:
+  - '0120'
+  - '0130'
+  - '0150'
+  weight: 15
+- tasks:
+  - '0170'
+  - 0180
+  weight: 10
+- tasks:
+  - 0280
+  - 0290
+  - '0300'
+  - '0310'
+  weight: 20
+- tasks:
+  - '0340'
+  - 0390
+  - '0400'
+  - '0410'
+  - '0420'
+  weight: 25
+- tasks:
+  - '0450'
+  - '0470'
+  - '0500'
+  - '0650'
+  weight: 20
+- tasks:
+  - '0520'
+  - '0530'
+  weight: 10
+- tasks:
+  - '0670'
+  - 0690
+  weight: 10
+- tasks:
+  - '0710'
+  - '0730'
+  - '0750'
+  weight: 15
+- tasks:
+  - '0750'
+  - '0760'
+  - '0770'
+  weight: 15
+settings:
+  EQUAL_TASKS_BY_USER: 10
+  EQUAL_TASKS_COUNT_BY_USER: 10
+solution:
+- artist: Artist3
+  task: '0100'
+- artist: Artist3
+  task: '0110'
+- artist: Artist7
+  task: '0120'
+- artist: Artist7
+  task: '0130'
+- artist: Artist7
+  task: '0150'
+- artist: Artist2
+  task: '0170'
+- artist: Artist2
+  task: 0180
+- artist: Artist5
+  task: 0190
+- artist: Artist5
+  task: '0200'
+- artist: Artist7
+  task: '0240'
+- artist: Artist7
+  task: '0250'
+- artist: Artist1
+  task: '0260'
+- artist: Artist6
+  task: '0270'
+- artist: Artist4
+  task: 0280
+- artist: Artist4
+  task: 0290
+- artist: Artist4
+  task: '0300'
+- artist: Artist4
+  task: '0310'
+- artist: Artist3
+  task: '0340'
+- artist: Artist3
+  task: 0390
+- artist: Artist3
+  task: '0400'
+- artist: Artist3
+  task: '0410'
+- artist: Artist3
+  task: '0420'
+- artist: Artist4
+  task: '0430'
+- artist: Artist2
+  task: '0440'
+- artist: Artist6
+  task: '0450'
+- artist: Artist3
+  task: '0460'
+- artist: Artist6
+  task: '0470'
+- artist: Artist2
+  task: 0480
+- artist: Artist4
+  task: 0490
+- artist: Artist6
+  task: '0500'
+- artist: Artist1
+  task: '0510'
+- artist: Artist1
+  task: '0520'
+- artist: Artist1
+  task: '0530'
+- artist: Artist6
+  task: '0540'
+- artist: Artist4
+  task: '0545'
+- artist: Artist1
+  task: '0550'
+- artist: Artist5
+  task: '0560'
+- artist: Artist1
+  task: '0570'
+- artist: Artist3
+  task: 0590
+- artist: Artist2
+  task: '0600'
+- artist: Artist1
+  task: '0610'
+- artist: Artist1
+  task: '0620'
+- artist: Artist4
+  task: '0630'
+- artist: Artist2
+  task: '0640'
+- artist: Artist6
+  task: '0650'
+- artist: Artist4
+  task: '0660'
+- artist: Artist6
+  task: '0670'
+- artist: Artist5
+  task: 0680
+- artist: Artist6
+  task: 0690
+- artist: Artist7
+  task: '0700'
+- artist: Artist5
+  task: '0710'
+- artist: Artist7
+  task: '0720'
+- artist: Artist5
+  task: '0730'
+- artist: Artist2
+  task: '0740'
+- artist: Artist5
+  task: '0750'
+- artist: Artist5
+  task: '0760'
+- artist: Artist5
+  task: '0770'
+- artist: Artist6
+  task: 0780
+- artist: Artist7
+  task: 0790
+- artist: Artist7
+  task: 0800
+- artist: Artist2
+  task: 0810
+tasks:
+- duration: 4.5
+  name: '0100'
+- duration: 2.5
+  name: '0110'
+- duration: 6.0
+  name: '0120'
+- duration: 10.0
+  name: '0130'
+- duration: 6.0
+  name: '0150'
+- duration: 4.5
+  name: '0170'
+- duration: 3.5
+  name: 0180
+- duration: 8.0
+  name: 0190
+- duration: 16.0
+  name: '0200'
+- duration: 4.5
+  name: '0240'
+- duration: 6.0
+  name: '0250'
+- duration: 4.5
+  name: '0260'
+- duration: 6.0
+  name: '0270'
+- duration: 6.0
+  name: 0280
+  tags:
+  - acting
+  - character1
+- duration: 4.5
+  name: 0290
+- duration: 8.0
+  name: '0300'
+  tags:
+  - acting
+  - character1
+- duration: 10.0
+  name: '0310'
+  tags:
+  - acting
+  - character1
+- duration: 8.0
+  name: '0340'
+- duration: 10.0
+  name: 0390
+  tags:
+  - acting
+- duration: 4.5
+  name: '0400'
+- duration: 3.5
+  name: '0410'
+- duration: 16.0
+  name: '0420'
+  tags:
+  - bodymech
+- duration: 2.0
+  name: '0430'
+- duration: 1.5
+  name: '0440'
+- duration: 4.5
+  name: '0450'
+- duration: 1.5
+  name: '0460'
+- duration: 6.0
+  name: '0470'
+- duration: 2.0
+  name: 0480
+- duration: 2.0
+  name: 0490
+- duration: 6.0
+  name: '0500'
+- duration: 3.5
+  name: '0510'
+  tags:
+  - bodymech
+  - combat
+- duration: 4.5
+  name: '0520'
+  tags:
+  - bodymech
+  - combat
+- duration: 14.0
+  name: '0530'
+  tags:
+  - bodymech
+  - combat
+- duration: 10.0
+  name: '0540'
+  tags:
+  - bodymech
+  - combat
+- duration: 8.0
+  name: '0545'
+- duration: 4.5
+  name: '0550'
+  tags:
+  - bodymech
+  - combat
+- duration: 3.5
+  name: '0560'
+- duration: 10.0
+  name: '0570'
+  tags:
+  - bodymech
+  - combat
+- duration: 1.5
+  name: 0590
+- duration: 3.5
+  name: '0600'
+- duration: 1.0
+  name: '0610'
+- duration: 10.0
+  name: '0620'
+  tags:
+  - bodymech
+  - combat
+- duration: 1.5
+  name: '0630'
+- duration: 2.0
+  name: '0640'
+- duration: 8.0
+  name: '0650'
+- duration: 10.0
+  name: '0660'
+  tags:
+  - acting
+  - character1
+- duration: 6.0
+  name: '0670'
+- duration: 3.5
+  name: 0680
+- duration: 3.5
+  name: 0690
+- duration: 4.5
+  name: '0700'
+- duration: 6.0
+  name: '0710'
+- duration: 4.5
+  name: '0720'
+- duration: 4.5
+  name: '0730'
+- duration: 6.0
+  name: '0740'
+- duration: 3.5
+  name: '0750'
+- duration: 3.5
+  name: '0760'
+- duration: 3.5
+  name: '0770'
+- duration: 2.0
+  name: 0780
+- duration: 4.5
+  name: 0790
+- duration: 6.0
+  name: 0800
+- duration: 16.0
+  name: 0810
+  tags:
+  - acting

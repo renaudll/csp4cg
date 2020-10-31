@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "csp4cg"
+version = "0.1.0"
+description = "CSP solvers for the CG/VFX industry."
+authors = ["Renaud Lessard Larouche <sigmao@gmail.com>"]
+
+[tool.poetry.dependencies]
+ortools = "*"
+python = ">=3.9,<3.10"
+pyside2 = ">=5.14"  # fix https://bugreports.qt.io/browse/PYSIDE-1140
+pyyaml = "*"
+
+[tool.poetry.dev-dependencies]
+pytest = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+pytest-qt = "*"
+pytest-xvfb = "*"
+black = "*"
+pylint = "*"
+mypy = "*"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pylint.MASTER]
+ignore="ui"  # ignore compiled .ui files
+extension-pkg-whitelist="PySide2"
+
+[tool.pylint.REPORT]
+output-format="colorized"
+
+[tool.pytest.ini_options]
+addopts=["-vv", "--cov", "csp4cg", "--cov", "tests", "--cov-report=term-missing", "--cov-report=xml"]
+
+[tool.coverate.run]
+branch=true
