@@ -1,0 +1,6 @@
+.idea
+venv
+*.egg-info
+.coverage
+htmlcov
+*/__pycache__/

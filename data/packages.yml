@@ -1,0 +1,15 @@
+core_context:
+  - version: 1.1
+    requires: python
+  - version: 1.2
+    requires: python
+  - version: 2.0
+    requires: python
+python:
+  - version: 2.7
+  - version: 3.6
+  - version: 3.7
+  - version: 3.8
+core_publish:
+  - version: 1.1
+    requires: core_context<2

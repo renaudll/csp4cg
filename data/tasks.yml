@@ -1,0 +1,217 @@
+artists:
+  - name: Artist1
+    tags:
+      - name: combat
+        weight: 10
+      - name: bodymech
+        weight: 15
+  - name: Artist2
+    availability: 75  # in percentage
+    tags:
+      - name: acting
+        weight: 10
+  - name: Artist3
+    tags:
+      - name: acting
+        weight: 10
+  - name: Antoine
+    tags:
+      - name: spiderman
+        weight: 5
+      - name: acting
+        weight: 10
+  - name: Artist4
+  - name: Artist5
+  - name: Artist6
+
+shots:
+  - name: "0100"
+    duration: 4.5
+  - name: "0110"
+    duration: 2.5
+  - name: "0120"
+    duration: 6.0
+  - name: "0130"
+    duration: 10.0
+  - name: "0150"
+    duration: 6.0
+  - name: "0170"
+    duration: 4.5
+  - name: "0180"
+    duration: 3.5
+  - name: "0190"
+    duration: 8.0
+  - name: "0200"
+    duration: 16.0
+  - name: "0240"
+    duration: 4.5
+  - name: "0250"
+    duration: 6.0
+  - name: "0260"
+    duration: 4.5
+  - name: "0270"
+    duration: 6.0
+  - name: "0280"
+    duration: 6.0
+    tags: [acting, spiderman]
+  - name: "0290"
+    duration: 4.5
+  - name: "0300"
+    duration: 8.0
+    tags: [acting, spiderman]
+  - name: "0310"
+    duration: 10.0
+    tags: [acting, spiderman]
+  - name: "0340"
+    duration: 8.0
+  - name: "0390"
+    duration: 10.0
+    tags: [ acting ]
+  - name: "0400"
+    duration: 4.5
+  - name: "0410"
+    duration: 3.5
+  - name: "0420"
+    duration: 16.0
+    tags: [bodymech]
+  - name: "0430"
+    duration: 2.0
+  - name: "0440"
+    duration: 1.5
+  - name: "0450"
+    duration: 4.5
+  - name: "0460"
+    duration: 1.5
+  - name: "0470"
+    duration: 6.0
+  - name: "0480"
+    duration: 2.0
+  - name: "0490"
+    duration: 2.0
+  - name: "0500"
+    duration: 6.0
+  - name: "0510"
+    duration: 3.5
+    tags: [bodymech, combat]
+  - name: "0520"
+    duration: 4.5
+    tags: [bodymech, combat]
+  - name: "0530"
+    duration: 14.0
+    tags: [bodymech, combat]
+  - name: "0540"
+    duration: 10.0
+    tags: [bodymech, combat]
+  - name: "0545"
+    duration: 8.0
+  - name: "0550"
+    duration: 4.5
+    tags: [ bodymech, combat ]
+  - name: "0560"
+    duration: 3.5
+  - name: "0570"
+    duration: 10.0
+    tags: [ bodymech, combat ]
+  - name: "0590"
+    duration: 1.5
+  - name: "0600"
+    duration: 3.5
+  - name: "0610"
+    duration: 0.0
+  - name: "0620"
+    duration: 10.0
+    tags: [ bodymech, combat ]
+  - name: "0630"
+    duration: 1.5
+  - name: "0640"
+    duration: 2.0
+  - name: "0650"
+    duration: 8.0
+  - name: "0660"
+    duration: 10.0
+    tags: [ acting, spiderman ]
+  - name: "0670"
+    duration: 6.0
+  - name: "0680"
+    duration: 3.5
+  - name: "0690"
+    duration: 3.5
+  - name: "0700"
+    duration: 4.5
+  - name: "0710"
+    duration: 6.0
+  - name: "0720"
+    duration: 4.5
+  - name: "0730"
+    duration: 4.5
+  - name: "0740"
+    duration: 6.0
+  - name: "0750"
+    duration: 3.5
+  - name: "0760"
+    duration: 3.5
+  - name: "0770"
+    duration: 3.5
+  - name: "0780"
+    duration: 2.0
+  - name: "0790"
+    duration: 4.5
+  - name: "0800"
+    duration: 6.0
+  - name: "0810"
+    duration: 16.0
+    tags: [ acting ]
+
+
+# Define preferred assignments here
+assignments:
+  - shot: "0100"
+    artist: Artist1
+  - shot: "0110"
+    artist: Artist1
+  - shot: "0120"
+    artist: Artist1
+  - shot: "0130"
+    artist: Artist1
+  - shot: "0150"
+    artist: Artist1
+
+
+
+preferences: {}
+#  - artist: "Artist2"
+#    shot: "0020"
+#    weight: 3
+#  - artist: "Artist3"
+#    shot: "0020"
+#    weight: 4
+
+
+preferred_combinations:
+  - shots: ["0100", "0110"]
+    weight: 10
+  - shots: ["0120", "0130", "0150"]
+    weight: 15
+  - shots: ["0170", "0180"]
+    weight: 10
+  - shots: ["0280", "0290", "0300", "0310"]
+    weight: 20
+  - shots: ["0340", "0390", "0400", "0410", "0420"]
+    weight: 25
+  - shots: ["0450", "0470", "0500", "0650"]
+    weight: 20
+  - shots: ["0520", "0530"]
+    weight: 10
+  - shots: ["0670", "0690"]
+    weight: 10
+  - shots: ["0710", "0730", "0750"]
+    weight: 15
+  - shots: ["0750", "0760", "0770"]
+    weight: 15
+
+# deadline: 30
+
+settings:
+  # There's an ideal amount of minutes we assign for each users. (total minutes / num artists)
+  EQUAL_HOURS_BY_USER: 10000
+  EQUAL_SHOT_COUNT_BY_USER: 1
