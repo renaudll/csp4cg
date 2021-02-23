@@ -1,72 +1,46 @@
-import sys
 import os
 
 import csp4cg
-from PySide2.QtWidgets import QApplication
-from PySide2 import QtCore
-from PySide2.QtQml import QQmlApplicationEngine
+from PySide2 import QtCore, QtUiTools, QtWidgets
+from .models import ArtistsModel, ShotListModel, ShotAssignmentModel
 from ortools.sat.python import cp_model
-
-from .models import AssignmentsModel, ArtistsModel, ShotListModel
+from . import _uiDef
 
 _DIR = os.path.dirname(__file__)
-_QML = os.path.join(_DIR, "qml", "Main.qml")
 _CONFIG_PATH = os.path.join("data", "tasks.yml")
 _CONFIG = csp4cg.tasks.Config.from_path(_CONFIG_PATH)
+_QML = os.path.join(_DIR, "gantt.qml")
 
+class CustomPrinter(cp_model.CpSolverSolutionCallback):
+    """Print that compute the assignments."""
 
-class Api(QtCore.QObject):
-    def __init__(
-        self,
-        model: AssignmentsModel,
-        model_artist: ArtistsModel,
-        model_shots: ShotListModel,
-    ):
+    def __init__(self, solver, callback):
         super().__init__()
-        self._config = _CONFIG
-        self._solver = csp4cg.tasks.Solver(self._config)
-        self._printer = CustomPrinter(self._solver, self)
-        self._solver._printer = self._printer
-        self._model = model
-        self._model_artist = model_artist
-        self._model_shots = model_shots
+        self._solver = solver
+        self._callback = callback
 
-        # TODO: Use single thread for terminate?
-        self._threadpool = QtCore.QThreadPool()
-
-    def update_assignations(self, shots_by_artists):
-        self._model._data = shots_by_artists.items()
-        self._model._update()
-
-    @QtCore.Slot()
-    def play(self):
-        self._model.clear()
-        worker = Worker(self)
-        worker.signals.foundSolution.connect(self.update_assignations)
-        self._threadpool.start(worker)
-
-    @QtCore.Slot()
-    def stop(self):
-        self._threadpool.stop()
+    def on_solution_callback(self):
+        """Called on each new solution."""
+        solution = self._solver.get_assignments_2(getter=self.BooleanValue)
+        self._callback(solution)
 
 
-class WorkerSignals(QtCore.QObject):
+class WorkerSignals(QtCore.QObject):  # TODO: Why is this necessary?
     foundSolution = QtCore.Signal(object)
 
 
 class Worker(QtCore.QRunnable):
     """Worker thread for running background tasks."""
 
-    foundSolution = QtCore.Signal(object)
+    foundSolution = QtCore.Signal(object)  # TODO: Solution should be a list of assignments
 
-    def __init__(self, api):
+    def __init__(self):
         super(Worker, self).__init__()
-        self._api = api
+        self.signals = WorkerSignals()
         self._config = csp4cg.tasks.Config.from_path(_CONFIG_PATH)
         self._solver = csp4cg.tasks.Solver(self._config)
-        self._printer = CustomPrinter(self._solver, self)
+        self._printer = CustomPrinter(self._solver, self.signals.foundSolution.emit)
         self._solver.printer = self._printer
-        self.signals = WorkerSignals()
 
     def onSolutionFound(self, solution):
         self.signals.foundSolution.emit(solution)
@@ -76,35 +50,42 @@ class Worker(QtCore.QRunnable):
         self._solver.solve()
 
 
-class CustomPrinter(cp_model.CpSolverSolutionCallback):
-    """Print that compute the assignments."""
+class MainWindow(QtWidgets.QMainWindow):
+    def __init__(self, parent=None):
+        super(MainWindow, self).__init__(parent)
+        self._threadpool = QtCore.QThreadPool()
+        self.model_assignments = ShotAssignmentModel(self, {})
+        self.model_artist = ArtistsModel(_CONFIG.artists, parent=self)
+        self.model_shots = ShotListModel(_CONFIG.shots, parent=self)
 
-    def __init__(self, solver, api: Api):
-        super().__init__()
-        self._solver = solver
-        self._api = api
+        # self.ui = QtUiTools.QUiLoader(self).load(os.path.join(_DIR, "main.ui"), parent)
+        self.ui = _uiDef.Ui_MainWindow()
+        self.ui.setupUi(self)
 
-    def on_solution_callback(self):
-        """Called on each new solution."""
-        solution = self._solver.get_assignments(getter=self.BooleanValue)
-        self._api.onSolutionFound(solution)
+        self.ui.table_artists.setModel(self.model_artist)
+        self.ui.table_shots.setModel(self.model_shots)
+        self.ui.button_play.pressed.connect(self.play)
+        self.ui.button_stop.pressed.connect(self.stop)
 
+        self.ui.widget_gantt.rootContext().setContextProperty("artists", self.model_artist)
+        self.ui.widget_gantt.rootContext().setContextProperty("assignments", self.model_assignments)
+        self.ui.widget_gantt.setSource(QtCore.QUrl(_QML))
+
+    def update_assignations(self, shots_by_artists):
+        self.model_assignments.set_internal_data(shots_by_artists)
+
+    def play(self):
+        # self.model_assignments.clear()
+        worker = Worker()
+        worker.signals.foundSolution.connect(self.update_assignations)
+        self._threadpool.start(worker)
+
+    def stop(self):
+        self._threadpool.stop()
 
 def main():
-    app = QApplication([])
-    model_assignations = AssignmentsModel({})
-    model_artist = ArtistsModel(_CONFIG.artists)
-    model_shots = ShotListModel(_CONFIG.shots)
-    api = Api(model_assignations, model_artist, model_shots)
 
-    engine = QQmlApplicationEngine()
-    engine.rootContext().setContextProperty("api", api)
-    engine.rootContext().setContextProperty(
-        "artistAssignationModel", model_assignations
-    )
-    engine.rootContext().setContextProperty("artistsModel", model_artist)
-    engine.rootContext().setContextProperty("shotsModel", model_shots)
-
-    engine.load(QtCore.QUrl(_QML))
-
-    sys.exit(app.exec_())
+    app = QtWidgets.QApplication([])
+    win = MainWindow()
+    win.show()
+    app.exec_()

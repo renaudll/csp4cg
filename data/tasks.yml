@@ -14,15 +14,15 @@ artists:
     tags:
       - name: acting
         weight: 10
-  - name: Antoine
+  - name: Artist4
     tags:
       - name: spiderman
         weight: 5
       - name: acting
         weight: 10
-  - name: Artist4
   - name: Artist5
   - name: Artist6
+  - name: Artist7
 
 shots:
   - name: "0100"

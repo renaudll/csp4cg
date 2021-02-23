@@ -15,6 +15,7 @@
 import datetime
 import itertools
 import statistics
+import functools
 from dataclasses import dataclass
 from typing import Dict, List, Literal
 import operator
@@ -25,6 +26,7 @@ from tabulate import tabulate
 from csp4cg import core, utils
 
 
+@functools.total_ordering
 @dataclass
 class Artist:
     id: int
@@ -38,7 +40,11 @@ class Artist:
     def __hash__(self):
         return hash(repr(self))
 
+    def __lt__(self, other):
+        return other and self.name < other.name
 
+
+@functools.total_ordering
 @dataclass
 class Shot:
     id: int
@@ -51,6 +57,9 @@ class Shot:
 
     def __hash__(self):
         return hash(repr(self))
+
+    def __lt__(self, other):
+        return other and self.name < other.name
 
 
 @dataclass
@@ -273,7 +282,7 @@ class Solver(core.Solver):
 
         return self.get_assignments()
 
-    def get_assignments(self, getter=None):
+    def get_assignments(self, getter=None): # TODO: REMOVE
         getter = getter or self.solver.BooleanValue
         # Return assignations as a mapping of shots per artist
         shots_by_artists = {artist: [] for artist in self.artists}
@@ -282,6 +291,14 @@ class Solver(core.Solver):
             if getter(variable):
                 shots_by_artists[artist].append(shot)
         return shots_by_artists
+
+    def get_assignments_2(self, getter=None):
+        getter = getter or self.solver.BooleanValue
+        # Return assignations as a mapping of shots per artist
+        for artist, shot in itertools.product(self.artists, self.shots):
+            variable = self.get_variable((shot.id, artist.id))
+            if getter(variable):
+                yield ArtistAssignment(artist=artist, shot=shot)
 
     def create_total_distance_soft_constraint(
         self, prefix, expressions, goals, domain, multiplier
