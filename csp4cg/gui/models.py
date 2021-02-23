@@ -3,7 +3,7 @@ from PySide2 import QtCore, QtGui
 import operator
 import itertools
 from typing import List, Dict
-from csp4cg.tasks import Artist, Shot, ArtistAssignment
+from csp4cg.tasks import Artist, Shot, ShotAssignment
 
 
 class BaseTableModel(QtCore.QAbstractTableModel):
@@ -92,7 +92,7 @@ class ShotAssignmentModel(QtGui.QStandardItemModel):
         })
         self.set_internal_data(data)
 
-    def set_internal_data(self, data: List[ArtistAssignment]):
+    def set_internal_data(self, data: List[ShotAssignment]):
         self.clear()
 
         # Organize assignments by artists (x axis)

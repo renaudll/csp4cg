@@ -21,7 +21,7 @@ class CustomPrinter(cp_model.CpSolverSolutionCallback):
 
     def on_solution_callback(self):
         """Called on each new solution."""
-        solution = self._solver.get_assignments_2(getter=self.BooleanValue)
+        solution = self._solver.get_assignments(getter=self.BooleanValue)
         self._callback(solution)
 
 

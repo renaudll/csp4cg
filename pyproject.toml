@@ -30,7 +30,7 @@ extension-pkg-whitelist="PySide2"
 output-format="colorized"
 
 [tool.pytest.ini_options]
-addopts=["-vv", "--cov", "csp4cg", "--cov-report", "term-missing"]
+addopts=["-vv", "--cov", "csp4cg", "--cov", "tests", "--cov-report", "term-missing"]
 
 [tool.coverate.run]
 branch=true

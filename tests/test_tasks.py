@@ -1,4 +1,8 @@
 import datetime
+import itertools
+import operator
+
+from typing import List, Sequence, Callable
 
 from csp4cg import tasks
 
@@ -6,11 +10,34 @@ from csp4cg import tasks
 def _test(config, expected):
     solver = tasks.Solver(config)
     result = solver.solve()
-    actual = {
-        artist: sum((shot.duration for shot in shots), datetime.timedelta())
-        for artist, shots in result.items()
-    }
+    actual = _get_workload_by_artist(result)
     assert actual == expected
+
+
+def _groupby_sort(key: Callable, iterable: Sequence):
+    return {
+        key: tuple(val)
+        for key, val in itertools.groupby(sorted(iterable, key=key), key)
+    }
+
+
+def _get_assignments_by_artist(assignment: List[tasks.ShotAssignment]):
+    return _groupby_sort(operator.attrgetter("artist"), assignment)
+
+
+def _get_shots_by_artist(assignments: List[tasks.ShotAssignment]):
+    return {
+        artist: tuple(assignment.shot for assignment in assignments_)
+        for artist, assignments_ in _get_assignments_by_artist(assignments).items()
+    }
+
+
+def _get_workload_by_artist(assignments : List[tasks.ShotAssignment]):
+    actual = {}
+    for assignment in assignments:
+        actual.setdefault(assignment.artist, datetime.timedelta())
+        actual[assignment.artist] += assignment.shot.duration
+    return actual
 
 
 def test_spread_workload_1():
@@ -97,10 +124,7 @@ def test_spread_workload_complex_a():
 
     solver = tasks.Solver(config)
     result = solver.solve()
-    actual = sorted(
-        sum((shot.duration for shot in shots), datetime.timedelta())
-        for shots in result.values()
-    )
+    actual = sorted(_get_workload_by_artist(result).values())
     expected = [
         datetime.timedelta(hours=6),
         datetime.timedelta(hours=8),
@@ -144,10 +168,7 @@ def test_spread_workload_complex_b():
 
     solver = tasks.Solver(config)
     result = solver.solve()
-    actual = sorted(
-        sum((shot.duration for shot in shots), datetime.timedelta())
-        for shots in result.values()
-    )
+    actual = sorted(_get_workload_by_artist(result).values())
     expected = [
         datetime.timedelta(hours=8),
         datetime.timedelta(hours=8),
@@ -184,10 +205,7 @@ def test_5():
 
     solver = tasks.Solver(config)
     result = solver.solve()
-    actual = [
-        sorted(shot.duration for shot in shots) for artist, shots in result.items()
-    ]
-    actual = [len(value) for value in actual]
+    actual = [len(shots) for shots in _get_assignments_by_artist(result).values()]
     assert actual == [3, 3]
 
 
@@ -208,10 +226,11 @@ def test_preferred_combinations():
             ],
         }
     )
+    shot1, shot2, shot3, shot4 = config.shots
     solver = tasks.Solver(config)
-    results = solver.solve()
-    actual = {tuple(shot.name for shot in shots) for artist, shots in results.items()}
-    expected = {("0001", "0002", "0003"), ("0004",)}
+    assignments = solver.solve()
+    actual = set(_get_shots_by_artist(assignments).values())
+    expected = {(shot1, shot2, shot3), (shot4,)}
     assert actual == expected
 
 
@@ -237,10 +256,11 @@ def test_preferences():
     artist1, artist2 = config.artists
     shot1, shot2, shot3, shot4 = config.shots
     solver = tasks.Solver(config)
-    actual = solver.solve()
+    assignments = solver.solve()
+    actual = _get_shots_by_artist(assignments)
     expected = {
-        artist1: [shot2, shot3, shot4],
-        artist2: [shot1],
+        artist1: (shot2, shot3, shot4),
+        artist2: (shot1,),
     }
     assert actual == expected
 
@@ -270,9 +290,14 @@ def test_preferences_2():
     artist1, artist2 = config.artists
     shot1, shot2, shot3, shot4 = config.shots
     solver = tasks.Solver(config)
-    actual = solver.solve()
+    assignments = solver.solve()
+    actual = _get_shots_by_artist(assignments)
     expected = {
-        artist1: [shot2, shot3, shot4],
-        artist2: [shot1],
+        artist1: (
+            shot2,
+            shot3,
+            shot4,
+        ),
+        artist2: (shot1,),
     }
     assert actual == expected

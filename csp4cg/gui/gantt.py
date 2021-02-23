@@ -2,7 +2,7 @@
 import os
 import datetime
 from PySide2 import QtCore, QtWidgets, QtQuickWidgets
-from csp4cg.tasks import Artist, Shot, ArtistAssignment
+from csp4cg.tasks import Artist, Shot, ShotAssignment
 from csp4cg.gui.models import ArtistsModel, ShotAssignmentModel
 
 _DIR = os.path.dirname(__file__)
@@ -17,10 +17,10 @@ shot2 = Shot(id=1, name="Shot 2", duration=datetime.timedelta(hours=4), tags={})
 shot3 = Shot(id=2, name="Shot 3", duration=datetime.timedelta(hours=5), tags={})
 shot4 = Shot(id=3, name="Shot 4", duration=datetime.timedelta(hours=1), tags={})
 
-assignment1 = ArtistAssignment(artist=artist1, shot=shot1)
-assignment2 = ArtistAssignment(artist=artist1, shot=shot2)
-assignment3 = ArtistAssignment(artist=artist1, shot=shot3)
-assignment4 = ArtistAssignment(artist=artist1, shot=shot4)
+assignment1 = ShotAssignment(artist=artist1, shot=shot1)
+assignment2 = ShotAssignment(artist=artist1, shot=shot2)
+assignment3 = ShotAssignment(artist=artist1, shot=shot3)
+assignment4 = ShotAssignment(artist=artist1, shot=shot4)
 
 artist_model = ArtistsModel([artist1, artist2, artist3])
 assignment_model = ShotAssignmentModel(

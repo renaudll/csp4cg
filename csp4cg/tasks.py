@@ -63,7 +63,7 @@ class Shot:
 
 
 @dataclass
-class ArtistAssignment:
+class ShotAssignment:
     """An artist assignment to a shot."""
 
     artist: Artist
@@ -104,7 +104,7 @@ class Config(core.Config):
 
     artists: List[Artist]
     shots: List[Shot]
-    assignments: List[ArtistAssignment]
+    assignments: List[ShotAssignment]
     preferences: List[ArtistShotPreference]
     settings: Settings
     combinations: List[ShotCombination]
@@ -144,7 +144,7 @@ class Config(core.Config):
 
         # Load predefined assignments
         assignments = [
-            ArtistAssignment(
+            ShotAssignment(
                 artists_by_name[entry["artist"]], shots_by_name[entry["shot"]]
             )
             for entry in config.get("assignments", [])
@@ -282,23 +282,13 @@ class Solver(core.Solver):
 
         return self.get_assignments()
 
-    def get_assignments(self, getter=None): # TODO: REMOVE
+    def get_assignments(self, getter=None) -> List[ShotAssignment]:
+        # TODO: Handle start and end time in the assignment
         getter = getter or self.solver.BooleanValue
-        # Return assignations as a mapping of shots per artist
-        shots_by_artists = {artist: [] for artist in self.artists}
         for artist, shot in itertools.product(self.artists, self.shots):
             variable = self.get_variable((shot.id, artist.id))
             if getter(variable):
-                shots_by_artists[artist].append(shot)
-        return shots_by_artists
-
-    def get_assignments_2(self, getter=None):
-        getter = getter or self.solver.BooleanValue
-        # Return assignations as a mapping of shots per artist
-        for artist, shot in itertools.product(self.artists, self.shots):
-            variable = self.get_variable((shot.id, artist.id))
-            if getter(variable):
-                yield ArtistAssignment(artist=artist, shot=shot)
+                yield ShotAssignment(artist=artist, shot=shot)
 
     def create_total_distance_soft_constraint(
         self, prefix, expressions, goals, domain, multiplier
