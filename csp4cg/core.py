@@ -141,7 +141,6 @@ class Solver:
 
     def solve(self):
         """Solve using provided constraints."""
-
         self.model.Maximize(
             sum(
                 itertools.chain(

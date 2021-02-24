@@ -17,7 +17,7 @@ import itertools
 import statistics
 import functools
 from dataclasses import dataclass
-from typing import Dict, List, Literal
+from typing import Dict, List, Literal, Generator
 import operator
 
 import humanize
@@ -282,7 +282,7 @@ class Solver(core.Solver):
 
         return self.get_assignments()
 
-    def get_assignments(self, getter=None) -> List[ShotAssignment]:
+    def get_assignments(self, getter=None) -> Generator[ShotAssignment, None, None]:
         # TODO: Handle start and end time in the assignment
         getter = getter or self.solver.BooleanValue
         for artist, shot in itertools.product(self.artists, self.shots):
