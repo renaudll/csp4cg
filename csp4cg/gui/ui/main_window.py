@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file '_uiDef.ui'
+## Form generated from reading UI file 'main_window.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -20,7 +20,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1501, 687)
+        MainWindow.resize(1477, 743)
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -93,6 +93,11 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer_progress)
 
+        self.button_export_assignments = QPushButton(self.centralwidget)
+        self.button_export_assignments.setObjectName(u"button_export_assignments")
+
+        self.horizontalLayout.addWidget(self.button_export_assignments)
+
         self.checkBox_live = QCheckBox(self.centralwidget)
         self.checkBox_live.setObjectName(u"checkBox_live")
         self.checkBox_live.setChecked(True)
@@ -105,7 +110,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1501, 27))
+        self.menubar.setGeometry(QRect(0, 0, 1477, 27))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -120,6 +125,11 @@ class Ui_MainWindow(object):
         self.label_artists.setObjectName(u"label_artists")
 
         self.verticalLayout.addWidget(self.label_artists)
+
+        self.lineEdit_search_artists = QLineEdit(self.dockWidgetContents)
+        self.lineEdit_search_artists.setObjectName(u"lineEdit_search_artists")
+
+        self.verticalLayout.addWidget(self.lineEdit_search_artists)
 
         self.table_artists = QTableView(self.dockWidgetContents)
         self.table_artists.setObjectName(u"table_artists")
@@ -148,6 +158,16 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_2.addItem(self.horizontalSpacer_2)
 
+        self.button_import_artists = QPushButton(self.dockWidgetContents)
+        self.button_import_artists.setObjectName(u"button_import_artists")
+
+        self.horizontalLayout_2.addWidget(self.button_import_artists)
+
+        self.button_export_artists = QPushButton(self.dockWidgetContents)
+        self.button_export_artists.setObjectName(u"button_export_artists")
+
+        self.horizontalLayout_2.addWidget(self.button_export_artists)
+
 
         self.verticalLayout.addLayout(self.horizontalLayout_2)
 
@@ -163,6 +183,11 @@ class Ui_MainWindow(object):
         self.label_shots.setObjectName(u"label_shots")
 
         self.verticalLayout_4.addWidget(self.label_shots)
+
+        self.lineEdit_search_shots = QLineEdit(self.dockWidgetContents_2)
+        self.lineEdit_search_shots.setObjectName(u"lineEdit_search_shots")
+
+        self.verticalLayout_4.addWidget(self.lineEdit_search_shots)
 
         self.table_shots = QTableView(self.dockWidgetContents_2)
         self.table_shots.setObjectName(u"table_shots")
@@ -191,6 +216,16 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_4.addItem(self.horizontalSpacer_3)
 
+        self.button_import_shots = QPushButton(self.dockWidgetContents_2)
+        self.button_import_shots.setObjectName(u"button_import_shots")
+
+        self.horizontalLayout_4.addWidget(self.button_import_shots)
+
+        self.button_export_shots = QPushButton(self.dockWidgetContents_2)
+        self.button_export_shots.setObjectName(u"button_export_shots")
+
+        self.horizontalLayout_4.addWidget(self.button_export_shots)
+
 
         self.verticalLayout_4.addLayout(self.horizontalLayout_4)
 
@@ -209,12 +244,17 @@ class Ui_MainWindow(object):
         self.button_stop.setText(QCoreApplication.translate("MainWindow", u"Stop", None))
         self.label_progress.setText("")
         self.progressBar.setFormat(QCoreApplication.translate("MainWindow", u"%p%", None))
+        self.button_export_assignments.setText(QCoreApplication.translate("MainWindow", u"Export", None))
         self.checkBox_live.setText(QCoreApplication.translate("MainWindow", u"Live", None))
         self.label_artists.setText(QCoreApplication.translate("MainWindow", u"Artists", None))
         self.button_add_artist.setText(QCoreApplication.translate("MainWindow", u"Add", None))
         self.button_remove_artists.setText(QCoreApplication.translate("MainWindow", u"Remove", None))
+        self.button_import_artists.setText(QCoreApplication.translate("MainWindow", u"Import", None))
+        self.button_export_artists.setText(QCoreApplication.translate("MainWindow", u"Export", None))
         self.label_shots.setText(QCoreApplication.translate("MainWindow", u"Shots", None))
         self.button_add_shot.setText(QCoreApplication.translate("MainWindow", u"Add", None))
         self.button_remove_shots.setText(QCoreApplication.translate("MainWindow", u"Remove", None))
+        self.button_import_shots.setText(QCoreApplication.translate("MainWindow", u"Import", None))
+        self.button_export_shots.setText(QCoreApplication.translate("MainWindow", u"Export", None))
     # retranslateUi
 

@@ -3,7 +3,7 @@ from PySide2 import QtCore, QtGui
 import datetime
 import operator
 import itertools
-from typing import List, Sequence
+from typing import List, Sequence, Any
 from csp4cg.tasks import Artist, Shot, ShotAssignment
 
 
@@ -12,7 +12,7 @@ class BaseTableModel(QtCore.QAbstractTableModel):
     _EDITABLE_COLUMNS = set()
 
     def __init__(self, parent, data: Sequence[object]):
-        super(BaseTableModel, self).__init__(parent)
+        super().__init__(parent)
         self._data = data
 
     def rowCount(self, parent=None, *args, **kwargs):
@@ -24,10 +24,10 @@ class BaseTableModel(QtCore.QAbstractTableModel):
     def headerData(self, section, orientation, role=None):
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
             return self._HEADERS[section].title()
-        super(BaseTableModel, self).headerData(section, orientation, role=role)
+        super().headerData(section, orientation, role=role)
 
     def flags(self, index):
-        flags = super(BaseTableModel, self).flags(index)
+        flags = super().flags(index)
         if index.column() in self._EDITABLE_COLUMNS:
             flags |= QtCore.Qt.EditRole
         return flags
@@ -38,6 +38,8 @@ class BaseTableModel(QtCore.QAbstractTableModel):
             attr = self._HEADERS[index.column()]
             value = getattr(shot, attr)
             return str(value)
+        if role == QtCore.Qt.UserRole:
+            return self._data[index.row()]
 
     def setData(self, index, value, role=None):
         if role == QtCore.Qt.EditRole:
@@ -46,7 +48,7 @@ class BaseTableModel(QtCore.QAbstractTableModel):
             setattr(shot, attr, value)
             self.dataChanged.emit(index, index, QtCore.Qt.DisplayRole)
             return True
-        return super(BaseTableModel, self).setData(index, value, role=role)
+        return super().setData(index, value, role=role)
 
 
 class ArtistsModel(BaseTableModel):
@@ -56,12 +58,12 @@ class ArtistsModel(BaseTableModel):
     _EDITABLE_COLUMNS = {0, 1}
 
     def __init__(self, data: List[Artist], parent=None):
-        super(ArtistsModel, self).__init__(parent, data)
+        super().__init__(parent, data)
 
     def setData(self, index, value, role=None):
         if index.column() == 1:  # case availability
             value = int(value)
-        return super(ArtistsModel, self).setData(index, value, role=role)
+        return super().setData(index, value, role=role)
 
 
 class ShotListModel(BaseTableModel):
@@ -71,12 +73,12 @@ class ShotListModel(BaseTableModel):
     _EDITABLE_COLUMNS = {0, 1}
 
     def __init__(self, data: Sequence[Shot], parent=None):
-        super(ShotListModel, self).__init__(parent, data)
+        super().__init__(parent, data)
 
     def setData(self, index, value, role=None):
         if index.column() == 1:  # cast shot duration
             value = datetime.timedelta(hours=float(value))
-        return super(ShotListModel, self).setData(index, value, role=role)
+        return super().setData(index, value, role=role)
 
 
 RoleXCoord = QtCore.Qt.UserRole + 1001
@@ -84,18 +86,23 @@ RoleYCoord = QtCore.Qt.UserRole + 1002
 RoleWidth = QtCore.Qt.UserRole + 1003
 RoleArtist = QtCore.Qt.UserRole + 1004
 RoleShot = QtCore.Qt.UserRole + 1005
+RoleHighlight = QtCore.Qt.UserRole + 1006
 
 
 class ShotAssignmentModel(QtGui.QStandardItemModel):
     def __init__(self, parent, data):
-        super(ShotAssignmentModel, self).__init__(parent)
-        self.setItemRoleNames({
-            RoleXCoord: b"coordX",
-            RoleYCoord: b"coordY",
-            RoleArtist: b"artist",
-            RoleShot: b"shot",
-            RoleWidth: b"gantBarWidth",
-        })
+        super().__init__(parent)
+        self.setItemRoleNames(
+            {
+                RoleXCoord: b"coordX",
+                RoleYCoord: b"coordY",
+                RoleArtist: b"artist",
+                RoleShot: b"shot",
+                RoleWidth: b"gantBarWidth",
+                RoleHighlight: b"highlight",
+                QtCore.Qt.DisplayRole: b"display",
+            }
+        )
         self.set_internal_data(data)
 
     def set_internal_data(self, data: List[ShotAssignment]):
@@ -111,7 +118,8 @@ class ShotAssignmentModel(QtGui.QStandardItemModel):
             x_coord = 0.0
             for assignment in assignments:
                 item = QtGui.QStandardItem(
-                    f"{assignment.artist.name} have {assignment.shot.name} ({x_coord}, {y_coord})"
+                    f"{assignment.artist.name} have {assignment.shot.name} "
+                    f"({x_coord}, {y_coord})"
                 )
                 width = assignment.shot.duration.total_seconds() / 60 / 60  # hours
                 item.setData(x_coord, RoleXCoord)
@@ -119,5 +127,22 @@ class ShotAssignmentModel(QtGui.QStandardItemModel):
                 item.setData(width, RoleWidth)
                 item.setData(assignment.artist.name, RoleArtist)
                 item.setData(assignment.shot.name, RoleShot)
+                item.setData(True, RoleHighlight)
+                item.setData(assignment, QtCore.Qt.UserRole)
                 self.appendRow(item)
                 x_coord += width
+
+
+class ShotAssignmentProxyModel(QtCore.QIdentityProxyModel):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self._highlights = []
+
+    def set_hightlights(self, assignments):
+        self._highlights = assignments
+
+    def data(self, index: QtCore.QModelIndex, role: int = ...) -> Any:
+        if role == RoleHighlight:
+            data = super().data(index, QtCore.Qt.UserRole)
+            return not self._highlights or data in self._highlights
+        return super().data(index, role)

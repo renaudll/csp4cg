@@ -307,7 +307,8 @@ class Solver(core.Solver):
         ]
 
         # We'll want the penalty to be relative to the domain.
-        # Since we use integer arithmetics we need to scale our computations in percentage.
+        # Since we use integer arithmetics we need to scale
+        # our computations in percentage.
         new_domain = domain * multiplier * 100
         expr_total_penalty = -sum(vars_distances) * multiplier * 100
         var_penalty = self.model.NewIntVar(-new_domain, 0, f"{prefix}_sadads")

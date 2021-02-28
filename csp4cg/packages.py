@@ -71,7 +71,7 @@ class Config(core.Config):
         for package_name, package_data in config.items():
             versions = []
             for version_data in package_data:
-                # UX: We cast version to string in case user accidentally write a YAML float
+                # UX: We cast version to string in case user wrote a YAML float
                 version_number = str(version_data["version"])
                 requires = version_data.get("requires", [])
                 requires = [requires] if not isinstance(requires, list) else requires

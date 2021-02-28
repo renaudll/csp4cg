@@ -4,3 +4,4 @@ venv
 .coverage
 htmlcov
 */__pycache__/
+poetry.lock

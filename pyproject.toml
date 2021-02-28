@@ -18,6 +18,8 @@ pytest-cov = "*"
 black = "*"
 pylint = "*"
 mypy = "*"
+flake8 = "*"
+flake8-black = "*"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

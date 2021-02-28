@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1501</width>
-    <height>687</height>
+    <width>1477</width>
+    <height>743</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -120,6 +120,13 @@
        </spacer>
       </item>
       <item>
+       <widget class="QPushButton" name="button_export_assignments">
+        <property name="text">
+         <string>Export</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QCheckBox" name="checkBox_live">
         <property name="text">
          <string>Live</string>
@@ -138,7 +145,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1501</width>
+     <width>1477</width>
      <height>27</height>
     </rect>
    </property>
@@ -156,6 +163,9 @@
         <string>Artists</string>
        </property>
       </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_search_artists"/>
      </item>
      <item>
       <widget class="QTableView" name="table_artists">
@@ -208,6 +218,20 @@
          </property>
         </spacer>
        </item>
+       <item>
+        <widget class="QPushButton" name="button_import_artists">
+         <property name="text">
+          <string>Import</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="button_export_artists">
+         <property name="text">
+          <string>Export</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
     </layout>
@@ -225,6 +249,9 @@
         <string>Shots</string>
        </property>
       </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_search_shots"/>
      </item>
      <item>
       <widget class="QTableView" name="table_shots">
@@ -276,6 +303,20 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="button_import_shots">
+         <property name="text">
+          <string>Import</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="button_export_shots">
+         <property name="text">
+          <string>Export</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>

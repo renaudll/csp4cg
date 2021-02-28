@@ -32,7 +32,7 @@ def _get_shots_by_artist(assignments: List[tasks.ShotAssignment]):
     }
 
 
-def _get_workload_by_artist(assignments : List[tasks.ShotAssignment]):
+def _get_workload_by_artist(assignments: List[tasks.ShotAssignment]):
     actual = {}
     for assignment in assignments:
         actual.setdefault(assignment.artist, datetime.timedelta())
@@ -266,7 +266,8 @@ def test_preferences():
 
 
 def test_preferences_2():
-    """Validate we don't give more point to an artist preference if it match multiple tags."""
+    """Validate we don't give more point to an artist preference
+    if it match multiple tags."""
     config = tasks.Config.from_data(
         {
             "artists": [

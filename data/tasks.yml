@@ -16,7 +16,7 @@ artists:
         weight: 10
   - name: Artist4
     tags:
-      - name: spiderman
+      - name: character1
         weight: 5
       - name: acting
         weight: 10
@@ -53,15 +53,15 @@ shots:
     duration: 6.0
   - name: "0280"
     duration: 6.0
-    tags: [acting, spiderman]
+    tags: [acting, character1]
   - name: "0290"
     duration: 4.5
   - name: "0300"
     duration: 8.0
-    tags: [acting, spiderman]
+    tags: [acting, character1]
   - name: "0310"
     duration: 10.0
-    tags: [acting, spiderman]
+    tags: [acting, character1]
   - name: "0340"
     duration: 8.0
   - name: "0390"
@@ -129,7 +129,7 @@ shots:
     duration: 8.0
   - name: "0660"
     duration: 10.0
-    tags: [ acting, spiderman ]
+    tags: [ acting, character1 ]
   - name: "0670"
     duration: 6.0
   - name: "0680"
