@@ -4,6 +4,9 @@ import csv
 import dataclasses
 import datetime
 import os
+import time
+import queue
+import multiprocessing
 from typing import Type, List
 
 import csp4cg
@@ -38,7 +41,7 @@ class CustomPrinter(cp_model.CpSolverSolutionCallback):
 
     def on_solution_callback(self):
         """Called on each new solution."""
-        solution = self._solver.get_assignments(getter=self.BooleanValue)
+        solution = tuple(self._solver.get_assignments(getter=self.BooleanValue))
         self._callback(solution)
         if self._cancel:
             self.StopSearch()
@@ -57,21 +60,43 @@ class WorkerThread(QtCore.QThread):
         super().__init__(parent)
 
         self.signals = WorkerSignals()
-        self._config = _CONFIG
-        self._solver = None
-        self._printer = None
+        self._process = None
+        self._queue = None
+        self._cancel = False
 
     def onSolutionFound(self, solution):
         self.signals.foundSolution.emit(solution)
 
+    @staticmethod
+    def _solve(queue):
+        solver = csp4cg.tasks.Solver(_CONFIG)
+        printer = CustomPrinter(solver, queue.put)
+        solver.printer = printer
+        solver.solve()
+
     def run(self):
-        self._solver = csp4cg.tasks.Solver(self._config)
-        self._printer = CustomPrinter(self._solver, self.signals.foundSolution.emit)
-        self._solver.printer = self._printer
-        self._solver.solve()
+        self._cancel = False
+        # We use multiprocessing to be able to kill the process.
+        # https://stackoverflow.com/a/7752174
+        # In ortools, there's no way to interupt the solving immediately.
+        # There is the CpSolverSolutionCallback.StopSearch but it's not immediate.
+        # https://developers.google.com/optimization/cp/cp_tasks#solution-limit
+        self._queue = multiprocessing.Queue()
+        self._process = multiprocessing.Process(target=self._solve, args=(self._queue,))
+        self._process.start()
+
+        while not self._cancel:
+            try:
+                solution = self._queue.get_nowait()
+            except queue.Empty:
+                pass
+            else:
+                self.onSolutionFound(solution)
+            time.sleep(0.1)
 
     def cancel(self):
-        self._printer.cancel()
+        self._process.terminate()
+        self._cancel = True
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -113,9 +138,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.widget_gantt.setSource(QtCore.QUrl(_QML))
 
         # TODO: Find a way to make it work directly with QML
-        # self.ui.table_artists.selectionModel().selectionChanged.connect(
-        #     self.on_artist_selection_changed
-        # )
+        self.ui.table_artists.selectionModel().selectionChanged.connect(
+            self.on_artist_selection_changed
+        )
         self.ui.table_shots.selectionModel().selectionChanged.connect(
             self.on_shot_selection_changed
         )
