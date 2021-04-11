@@ -109,7 +109,7 @@ class Manager(QObject):
         # Compute new assignments
         assignments = [
             assignment
-            for assignment in self.contest.solution
+            for assignment in self.context.solution
             if assignment.task != task
         ]
         assignments.append(Assignment(new_artist, task))
@@ -139,7 +139,7 @@ class Manager(QObject):
         """Called when the solver found a solution."""
         self.solution_count += 1
         self.context.solution, self.statistics = data
-        self.current_score = sum(score for _, score in self.statistics)
+        self.current_score = sum(score for _, score, _ in self.statistics)
         self.perform_autosave()
         self.onSolutionFound.emit()
 

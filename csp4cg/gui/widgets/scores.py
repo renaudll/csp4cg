@@ -1,4 +1,5 @@
 """Widgets displaying details about the current solve score."""
+from enum import Enum
 from typing import Optional
 
 from PySide2.QtCore import QModelIndex, QSortFilterProxyModel, Qt, QObject
@@ -16,8 +17,17 @@ from PySide2.QtWidgets import (
 )
 
 
-_COLOR_BONUS = QColor(50, 100, 50)
-_COLOR_MALUS = QColor(100, 50, 50)
+class ScoreType(Enum):
+    Neutral = 0
+    Positive = 1
+    Negative = 2
+
+
+_COLOR_BY_SCORE_TYPE = {
+    ScoreType.Positive: QColor(50, 100, 50),
+    ScoreType.Negative: QColor(100, 50, 50),
+}
+
 RoleScore = Qt.UserRole + 1
 
 
@@ -83,19 +93,24 @@ class PointsTableModel(QStandardItemModel):
     def __init__(self, parent: QObject):
         super().__init__(parent)
 
-        self.setHorizontalHeaderLabels(["Name", "Score"])
-
     def set_scores(self, statistics):
         """Update the model with a new solution."""
         self.clear()
 
-        for name, score in statistics:
-            items = [QStandardItem(name), QStandardItem(str(score))]
-            color = _color_from_score(score)
+        self.setHorizontalHeaderLabels(["Name", "Score", "Weight"])
+
+        for name, score, weight in statistics:
+            items = [
+                QStandardItem(name),
+                QStandardItem(str(score)),
+                QStandardItem(str(weight)),
+            ]
+            score_type = _get_score_type(score, weight)
+            color = _COLOR_BY_SCORE_TYPE.get(score_type)
 
             for item in items:
                 item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
-                item.setData(score, RoleScore)
+                item.setData(score_type, RoleScore)
                 if color:
                     item.setData(color, Qt.BackgroundColorRole)
 
@@ -133,19 +148,20 @@ class ScoreProxyModel(QSortFilterProxyModel):
             return False
 
         # Otherwise filter by score
-        score = self.sourceModel().data(
-            self.sourceModel().index(source_row, 0), RoleScore
-        )
-        if score > 0:
+        index = self.sourceModel().index(source_row, 0)
+        score_type = self.sourceModel().data(index, RoleScore)
+        if score_type == ScoreType.Positive:
             return self._show_positive
-        if score < 0:
+        if score_type == ScoreType.Negative:
             return self._show_negative
         return self._show_neutral
 
 
-def _color_from_score(score: int) -> Optional[QColor]:
+def _get_score_type(score: int, weight: int) -> ScoreType:
     if score > 0:
-        return _COLOR_BONUS
+        return ScoreType.Positive
     if score < 0:
-        return _COLOR_MALUS
-    return None
+        return ScoreType.Negative
+    if score == 0 and weight > 0:  # missed opportunity
+        return ScoreType.Negative
+    return ScoreType.Neutral

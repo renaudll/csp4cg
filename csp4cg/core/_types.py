@@ -18,7 +18,7 @@ class Artist:
         return f"Artist({self.name})"
 
     def __hash__(self):
-        return hash(repr(self))
+        return hash(self.name)
 
     def __lt__(self, other):
         return other and self.name < other.name
@@ -47,7 +47,7 @@ class Task:
         return f"<Task {self.name} ({self.duration} h)>"
 
     def __hash__(self):
-        return hash(repr(self))
+        return hash(self.name)
 
     def __lt__(self, other):
         return other and self.name < other.name

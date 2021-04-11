@@ -101,7 +101,7 @@ class CustomPrinter(cp_model.CpSolverSolutionCallback):
         """Called on each new solution."""
         solution = tuple(self._iter_assignments())
         scores = tuple(
-            (variable.Name(), self.Value(variable) * score)
+            (variable.Name(), self.Value(variable) * score, score)
             for variable, score in self._solver.iter_variables_and_cost()
         )
         self._callback((solution, scores))
