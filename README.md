@@ -121,4 +121,5 @@ source venv/bin/activate  # Enter the virtualenv
 pip install poetry  # Install poetry
 poetry install  # Initialize project
 poetry run pytest  # Run tests
+python -m csp4cg  # Open the application
 ```
