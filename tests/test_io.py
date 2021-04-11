@@ -35,7 +35,11 @@ def test_serialization(tmp_path):
             {"name": "0010", "duration": 1.0, "tags": ["acting"]},
             {"name": "0020", "duration": 1.0},
         ],
-        "settings": {"EQUAL_TASKS_BY_USER": 100, "EQUAL_TASKS_COUNT_BY_USER": 100},
+        "settings": {
+            "TAGS": 100,
+            "EQUAL_TASKS_BY_USER": 10,
+            "EQUAL_TASKS_COUNT_BY_USER": 10,
+        },
         "assignments": [
             {"artist": "Artist1", "task": "0010"},
             {"artist": "Artist1", "task": "0020"},

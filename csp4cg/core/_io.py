@@ -181,13 +181,15 @@ def _task_from_dict(data: Dict) -> Task:
 
 def _settings_from_dict(data: Dict) -> Settings:
     return Settings(
-        data.get("EQUAL_TASKS_BY_USER", 0),
-        data.get("EQUAL_TASKS_COUNT_BY_USER", 0),
+        weight_tags=data.get("TAGS", 1),
+        weight_equal_hours_by_artists=data.get("EQUAL_TASKS_BY_USER", 0),
+        weight_equal_tasks_count_by_artists=data.get("EQUAL_TASKS_COUNT_BY_USER", 0),
     )
 
 
 def _settings_to_dict(settings: Settings) -> dict:
     return {
+        "TAGS": settings.weight_tags,
         "EQUAL_TASKS_BY_USER": settings.weight_equal_hours_by_artists,
         "EQUAL_TASKS_COUNT_BY_USER": settings.weight_equal_tasks_count_by_artists,
     }

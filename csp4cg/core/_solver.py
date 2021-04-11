@@ -192,12 +192,14 @@ class Solver(_Solver):
             for tag, weight in artist.tags.items():
                 if tag == task.name or tag in task.tags:
                     variable = self.get_variable_assignment(task, artist)
-                    self.set_variable_bool_score(variable, weight)
+                    self.set_variable_bool_score(
+                        variable, weight * context.settings.weight_tags
+                    )
 
-        # Apply combinations
+        # Apply task groups
         # This give points if a set of task are all assigned to the same artist.
         for combination in context.combinations:
-            weight = combination.weight
+            weight = combination.weight * context.settings.weight_tags
             combination_task_count = len(combination.tasks)
             prefix = str(combination)
 
@@ -269,11 +271,12 @@ class Solver(_Solver):
         :param goal: The variable desired value.
         :param cost: A cost multiplier.
         """
+        domain_exp = domain * domain
         var_distance = _create_distance(self.model, domain, prefix, expr, goal)
-        var_weight = self.create_variable_int(f"{prefix}_cost", 0, domain * domain)
+        var_weight = self.create_variable_int(f"{prefix}_cost", 0, domain_exp)
         self.model.AddMultiplicationEquality(var_weight, [var_distance, var_distance])
         var_total = self.create_soft_constraint_int(
-            f"{prefix}__total", 0, domain * domain * cost, -1
+            f"{prefix}_total", 0, domain_exp * cost, -1
         )
         self.model.Add(var_total == var_weight * cost)
 

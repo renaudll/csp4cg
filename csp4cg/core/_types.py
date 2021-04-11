@@ -83,8 +83,9 @@ class TaskGroup:
 class Settings:
     """Settings for solver heuristics."""
 
-    weight_equal_hours_by_artists: Literal[100] = 100
-    weight_equal_tasks_count_by_artists: Literal[100] = 100
+    weight_tags: Literal[10] = 100
+    weight_equal_hours_by_artists: Literal[10] = 10
+    weight_equal_tasks_count_by_artists: Literal[10] = 10
 
 
 @dataclass()

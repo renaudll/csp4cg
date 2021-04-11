@@ -50,7 +50,11 @@ class SettingsModel(QAbstractTableModel):
     """Model that display solver settings."""
 
     _HEADERS = ("Name", "Value")
-    _ATTRS = ("weight_equal_hours_by_artists", "weight_equal_tasks_count_by_artists")
+    _ATTRS = (
+        "weight_tags",
+        "weight_equal_hours_by_artists",
+        "weight_equal_tasks_count_by_artists",
+    )
 
     def __init__(self, settings: Settings, parent: QObject = None):
         super().__init__(parent)
