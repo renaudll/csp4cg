@@ -281,7 +281,7 @@ class Manager(QObject):
 
 
 def _get_unique_name(known, prefix):
-    suffix = itertools.count()
+    suffix = itertools.count(start=1)
     while True:
         name = f"{prefix}{next(suffix)}"
         if name not in known:
