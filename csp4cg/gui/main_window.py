@@ -81,10 +81,10 @@ class MainWindow(QMainWindow):
 
         self.addDockWidget(Qt.RightDockWidgetArea, self.widget_artists)
         self.addDockWidget(Qt.RightDockWidgetArea, self.widget_tasks)
-        self.addDockWidget(Qt.RightDockWidgetArea, self.widget_settings)
-        self.addDockWidget(Qt.RightDockWidgetArea, self.widget_scores)
         self.addDockWidget(Qt.RightDockWidgetArea, self.widget_tasksgroups)
         self.addDockWidget(Qt.LeftDockWidgetArea, self.widget_gantt)
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.widget_scores)
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.widget_settings)
         self.addToolBar(Qt.BottomToolBarArea, self.widget_footer)
 
         # Connect events

@@ -25,6 +25,7 @@ from csp4cg.core import Context
 from csp4cg.gui._manager import Manager
 from csp4cg.gui._utils import iter_selected_rows_data
 from csp4cg.gui.widgets._base import BaseTableProxyModel
+from ._base import ExcelLikeTableView
 
 
 TasksGroupTasksRole = Qt.UserRole + 1
@@ -43,7 +44,7 @@ class TasksGroupsWidget(QDockWidget):
 
         # Build widgets
         self.search_field = QLineEdit(self)
-        self.table = QTableView(self)
+        self.table = ExcelLikeTableView(self)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.table.horizontalHeader().setStretchLastSection(True)

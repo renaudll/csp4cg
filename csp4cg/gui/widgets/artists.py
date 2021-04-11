@@ -16,7 +16,6 @@ from PySide2.QtWidgets import (
     QLineEdit,
     QPushButton,
     QVBoxLayout,
-    QTableView,
     QAbstractItemView,
     QHBoxLayout,
     QHeaderView,
@@ -49,7 +48,7 @@ class ArtistsWidget(QDockWidget):
 
         # Build widgets
         self.search_field = QLineEdit(self)
-        self.table = QTableView(self)
+        self.table = _base.ExcelLikeTableView(self)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.table.horizontalHeader().setStretchLastSection(True)

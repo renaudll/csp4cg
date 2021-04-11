@@ -22,7 +22,6 @@ from PySide2.QtWidgets import (
     QHBoxLayout,
     QLineEdit,
     QVBoxLayout,
-    QTableView,
     QAbstractItemView,
     QPushButton,
     QDockWidget,
@@ -59,7 +58,7 @@ class TasksWidget(QDockWidget):
 
         # Build widget
         self.search_field = QLineEdit(self)
-        self.table = QTableView(self)
+        self.table = _base.ExcelLikeTableView(self)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.table.horizontalHeader().setStretchLastSection(True)
@@ -220,7 +219,10 @@ class TasksListModel(QAbstractListModel):
             return True
 
         if role == RoleTaskDuration:
-            value = datetime.timedelta(hours=float(value))
+            try:
+                value = datetime.timedelta(hours=float(value))
+            except ValueError:
+                return False
             if value == task.duration:
                 return False
             task.duration = value

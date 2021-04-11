@@ -3,9 +3,16 @@
 from typing import Any
 
 from PySide2.QtCore import QObject, QAbstractTableModel, QModelIndex, Qt
-from PySide2.QtWidgets import QTableView, QVBoxLayout, QDockWidget, QWidget, QHeaderView
+from PySide2.QtWidgets import (
+    QVBoxLayout,
+    QDockWidget,
+    QWidget,
+    QHeaderView,
+    QAbstractItemView,
+)
 
 from csp4cg.core._types import Settings
+from ._base import ExcelLikeTableView
 from .._manager import Manager
 
 
@@ -20,8 +27,9 @@ class SettingsWidget(QDockWidget):
         self._manager = manager
 
         # Build widgets
-        self.table = QTableView(self)
+        self.table = ExcelLikeTableView(self)
         self.table.verticalHeader().hide()
+        self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.table.horizontalHeader().setStretchLastSection(True)
 
@@ -84,7 +92,10 @@ class SettingsModel(QAbstractTableModel):
     ) -> bool:
         if role == Qt.EditRole and index.column() == 1:
             attr = self._ATTRS[index.row()]
-            value = int(value)  # Note: All settings are int for now.
+            try:
+                value = int(value)  # Note: All settings are int for now.
+            except ValueError:
+                return False
             setattr(self._settings, attr, value)
             self.dataChanged.emit(index, index, [role])
             return True

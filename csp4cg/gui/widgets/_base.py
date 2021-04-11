@@ -2,7 +2,15 @@
 # pylint: disable=unused-argument
 from typing import Any, Tuple
 
-from PySide2.QtCore import QObject, QIdentityProxyModel, QModelIndex, Qt
+from PySide2.QtCore import (
+    QObject,
+    QIdentityProxyModel,
+    QModelIndex,
+    Qt,
+    QItemSelectionModel,
+)
+from PySide2.QtGui import QKeyEvent
+from PySide2.QtWidgets import QTableView, QAbstractItemView
 
 
 class BaseTableProxyModel(QIdentityProxyModel):
@@ -57,3 +65,30 @@ class BaseTableProxyModel(QIdentityProxyModel):
         # Note: I would expect to use self.sourceModel().index(...) here.
         # However doing so make columns at index >1 non-editable...
         return self.index(proxyIndex.row(), proxyIndex.column(), QModelIndex())
+
+
+class ExcelLikeTableView(QTableView):
+    """TableView that act like excel when editing.
+
+    Inspired from: https://pohlondrej.com/qtableview-excel-like-editing
+    """
+
+    def keyPressEvent(self, event: QKeyEvent) -> None:
+        if event.key() != Qt.Key_Return:
+            super(ExcelLikeTableView, self).keyPressEvent(event)
+            return
+
+        index = self.currentIndex()
+        next_row = index.row() + 1
+
+        # Do nothing if we are already in the next row.
+        if next_row + 1 > self.model().rowCount():
+            return
+
+        if self.state() == QTableView.EditingState:
+            next_index = self.model().index(next_row, index.column())
+            self.setCurrentIndex(next_index)
+            self.selectionModel().select(next_index, QItemSelectionModel.ClearAndSelect)
+            self.edit(next_index)
+        else:
+            self.edit(index)
