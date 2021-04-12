@@ -3,18 +3,18 @@
 set VENV_NAME="venv_windows"
 set PATH_VENV_ACTIVATE_SCRIPT="%~dp0/%VENV_NAME%/Scripts/activate.bat"
 
-REM Validate python 3.9 is installed
-echo [INFO] Checking if python-3.9 is installed...
-py -3.9 --version >NUL 2>NUL
+REM Validate python 3.8 is installed
+echo [INFO] Checking if python-3.8 is installed...
+py -3.8 --version >NUL 2>NUL
 if errorlevel 1 (
-    echo [ERROR] Python 3.9 is not installed. Please go on python.org to install it.
+    echo [ERROR] Python 3.8 is not installed. Please go on python.org to install it.
     goto end
 )
 
 REM Create virtualenv
 if not exist %PATH_VENV_ACTIVATE_SCRIPT% (
     echo [INFO] Creating virtual environment...
-    py -3.9 -m venv %VENV_NAME%
+    py -3.8 -m venv %VENV_NAME%
 )
 
 REM Validate virtualenv

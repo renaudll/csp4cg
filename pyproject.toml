@@ -6,7 +6,7 @@ authors = ["Renaud Lessard Larouche <sigmao@gmail.com>"]
 
 [tool.poetry.dependencies]
 ortools = "*"
-python = ">=3.9,<3.10"
+python = ">=3.8,<3.10"
 pyside2 = ">=5.14"  # fix https://bugreports.qt.io/browse/PYSIDE-1140
 pyyaml = "*"
 

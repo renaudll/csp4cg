@@ -32,7 +32,7 @@ This tool does exactly that using this workflow:
 
 # Installation (Windows)
 
-1. Go to [python.org](https://www.python.org/downloads/) and install python-3.9.
+1. Go to [python.org](https://www.python.org/downloads/) and install python-3.8.
 2. Double-click the `bootstrap.bat` script.
 
 Running the script the first time might take time. It should be fast afterward.
@@ -112,11 +112,11 @@ The `Score` panel explained the decisions the solver took.
 
 # Development
 
-This project require python-3.9.
-If you don't have python-3.9 available you can obtain if with pyenv.
+This project require python-3.8.
+If you don't have python-3.8 available you can obtain if with pyenv.
 
 ```bash
-python3.9 -m venv venv  # Create a python virtualenv
+python3.8 -m venv venv  # Create a python virtualenv
 source venv/bin/activate  # Enter the virtualenv
 pip install poetry  # Install poetry
 poetry install  # Initialize project
